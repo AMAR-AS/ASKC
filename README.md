@@ -1,51 +1,48 @@
 # ASKC – ASK Studio (Secured)
 
-Security-hardened line of **ASK Studio** for the [ASKC](https://github.com/AMAR-AS/ASKC) repository.
+Security-hardened core for **ASK Studio**.
 
-This package does **not** replace the full product modules. It adds enforceable security controls that hosts should use when wiring file system, run/terminal, preview, extensions, and AutoFix.
+**Full application** (editor, project folder, run/terminal, preview, themes) is packaged for share/download as:
 
-## What’s included
+- `ask-studio-0.1.0.zip` — complete unified project  
+- Folder layout: `apps/` · `packages/` · `security/` · `docs/`
+
+This GitHub repository holds the **secured core** so security can be reviewed independently.
+
+## Secured core contents
 
 | Path | Purpose |
 |------|---------|
 | `SECURITY.md` | Threat model & non-negotiable rules |
 | `security/pathSandbox.ts` | Project-root path confinement |
-| `security/commandAllowlist.ts` | Runtime / command allowlist (no silent shell chaining) |
-| `security/secureFs.ts` | FS adapter wrapper that rejects path escape |
-| `security/csp.ts` | Recommended CSP + preview iframe sandbox |
-| `docs/IMPROVEMENTS.md` | Roadmap of further product improvements |
+| `security/commandAllowlist.ts` | Runtime allowlist; no shell chaining |
+| `security/secureFs.ts` | FS wrapper rejecting path escape |
+| `security/csp.ts` | CSP + preview iframe sandbox |
+| `docs/IMPROVEMENTS.md` | Product improvement roadmap |
 
-## Quick use
+## Use
 
 ```ts
 import {
   createSecureFs,
   checkCommand,
-  resolveInRoot,
   RECOMMENDED_CSP,
   PREVIEW_IFRAME_SANDBOX,
 } from './security';
 
-// Confine FS to project root
 const secureFs = createSecureFs(rawFs, projectRoot);
-
-// Before any run:
 const check = checkCommand('python3', ['main.py']);
 if (!check.allowed) throw new Error(check.reason);
-
-// Preview iframe:
-// <iframe sandbox={PREVIEW_IFRAME_SANDBOX} srcDoc={html} />
 ```
 
-## Relationship to full ASK Studio
+## Standard software baseline (0.1.0)
 
-The complete product lives in the development workspace with modules:
-
-- Project Folder · Code Editor · Suggest · Run/Terminal · Preview Browser  
-- AutoFix (Balanced) · Toolchain · Extensions · Shared design system  
-
-**ASKC** holds the **secured core** and security policy so it can be versioned and reviewed independently.
+- Versioned release + changelog
+- LICENSE / CONTRIBUTING / SECURITY
+- Modular packages under a single tree for easy download
+- Light/dark theme + responsive UI in the full app package
+- Explicit security controls for FS and process execution
 
 ## License
 
-UNLICENSED / private unless otherwise stated by the repository owner.
+See [LICENSE](LICENSE).
